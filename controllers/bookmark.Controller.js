@@ -36,6 +36,22 @@ const getBookmarkByUrl = async (req, res) => {
   }
 };
 
+// get bookmark by tag or title using query string all bookmarks
+const getBookmarkByTagOrTitle = async (req, res) => {
+  try {
+    const bookmark = await Bookmark.find({
+      $or: [
+        { title: req.query.search },
+        { tags: req.query.search },
+        { url: req.query.search },
+      ],
+    }).lean();
+    res.send(bookmark);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Exporting the functions to be used in the main route index.js
 module.exports = {
   getAllBookmarks,
@@ -45,4 +61,5 @@ module.exports = {
   createBookmark,
   getBookmarkByUrl,
   deleteAllBookmarks,
+  getBookmarkByTagOrTitle,
 };
