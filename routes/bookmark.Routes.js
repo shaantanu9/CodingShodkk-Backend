@@ -18,6 +18,7 @@ const { validateBookmarkBody } = require("../middleware/Validators");
 router.get("/", getAllBookmarks);
 router.get("/url", getBookmarkByUrl); // get bookmark by url using query string
 router.get("/search", getBookmarkByTagOrTitle); // get bookmark by tag or title using query string all bookmarks
+// router.get("/domain", getBookmarkByDomain); // search by domain name
 router.post("/", createBookmark);
 router.get("/:id", getBookmark);
 router.patch("/:id", updateBookmark);

@@ -46,6 +46,9 @@ const getBookmarkByTagOrTitle = async (req, res) => {
         { tags: req.query.s },
         { url: req.query.s },
         { description: req.query.s },
+        {
+          url: { $regex: req.query.s, $options: "i" },
+        },
       ],
     }).lean();
     res.send(bookmark);
