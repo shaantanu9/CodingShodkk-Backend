@@ -1,4 +1,4 @@
-const crud = require("./crud.controller");
+const crud = require("./crud.Controller");
 const Users = require("../models/user.Model");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
