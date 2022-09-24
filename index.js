@@ -4,6 +4,11 @@ const connect = require("./config/db"); // require database connection
 app.use(express.json()); // parse requests of content-type - application/json
 require("dotenv").config(); // require dotenv to use environment variables
 
+// using morgan to log the requests
+const morgan = require("morgan");
+app.use(morgan("dev")); // dev is a format for morgan
+
+
 // connect to the main route
 const { userRoutes, orderRoutes, bookmarkRoutes } = require("./routes");
 
