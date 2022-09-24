@@ -1,14 +1,11 @@
 {
-  "name": "codeimprove",
+  "name": "codingshodkk-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend for CodingShodkk",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js"
+  "directories": {
+    "test": "test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "ajv": "^8.11.0",
     "bcrypt": "^5.0.1",
@@ -18,5 +15,21 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.2",
     "passport": "^0.6.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaantanu9/CodingShodkk-Backend.git"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "git+https://github.com/shaantanu9/CodingShodkk-Backend.git/issues"
+  },
+  "homepage": "https://github.com/shaantanu9/CodingShodkk-Backend#readme"
 }
