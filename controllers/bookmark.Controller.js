@@ -1,4 +1,4 @@
-const crud = require("./crud.controller");
+const crud = require("./crud.Controller");
 const Bookmark = require("../models/Bookmark.Model");
 
 // Create and Save a new User
