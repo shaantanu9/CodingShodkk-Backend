@@ -38,12 +38,14 @@ const getBookmarkByUrl = async (req, res) => {
 
 // get bookmark by tag or title using query string all bookmarks
 const getBookmarkByTagOrTitle = async (req, res) => {
+  console.log(req.query.s, "req.query.s");
   try {
     const bookmark = await Bookmark.find({
       $or: [
-        { title: req.query.search },
-        { tags: req.query.search },
-        { url: req.query.search },
+        { title: req.query.s },
+        { tags: req.query.s },
+        { url: req.query.s },
+        { description: req.query.s },
       ],
     }).lean();
     res.send(bookmark);
