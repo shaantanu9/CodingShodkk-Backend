@@ -2,7 +2,9 @@ const express = require("express"); // require express
 const app = express(); // create express app
 const connect = require("./config/db"); // require database connection
 app.use(express.json()); // parse requests of content-type - application/json
+require("dotenv").config(); // require dotenv to use environment variables
 
+// connect to the main route
 const { userRoutes, orderRoutes, bookmarkRoutes } = require("./routes");
 
 // cors is a middleware to allow cross origin resource sharing
@@ -14,8 +16,16 @@ app.use("/orders", orderRoutes);
 app.use("/users", userRoutes);
 app.use("/bookmarks", bookmarkRoutes);
 
+// middleware to handle 404 error
+app.use((req, res, next) => {
+  res.status(404).send("404 Not Found");
+});
+
+//Port number
+PORT = process.env.PORT || 3000;
+
 // app.listen is a method to start the server
-app.listen(3000, async () => {
+app.listen(PORT, async () => {
   await connect();
-  console.log("Server is running on port 3000");
+  console.log(`listening on port ${PORT}`);
 });
