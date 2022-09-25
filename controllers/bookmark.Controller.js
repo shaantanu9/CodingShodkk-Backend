@@ -73,9 +73,11 @@ const updateBookmarkLike = async (req, res) => {
         .select("likesList")
         .then((data) => data.likesList.length);
 
-      return res
-        .status(200)
-        .send({ likeCount, message: "The bookmark has been disliked" });
+      return res.status(200).send({
+        like: false,
+        likeCount,
+        message: "The bookmark has been disliked",
+      });
     } else {
       await bookmark.updateOne({ $push: { likesList: req.body.userId } }); // push the user id to the likes array
       const likeCount = await Bookmark.findById(req.params.id)
@@ -83,9 +85,11 @@ const updateBookmarkLike = async (req, res) => {
         .select("likesList")
         .then((data) => data.likesList.length);
 
-      return res
-        .status(200)
-        .send({ likeCount, message: "The bookmark has been liked" });
+      return res.status(200).send({
+        like: true,
+        likeCount,
+        message: "The bookmark has been liked",
+      });
     }
   } catch (error) {
     return res.status(500).send(error);
