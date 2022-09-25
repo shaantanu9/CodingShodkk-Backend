@@ -63,11 +63,29 @@ const updateBookmarkLike = async (req, res) => {
     // check if the user id is already in the likes array
 
     if (bookmark.likesList.includes(req.body.userId)) {
-      await bookmark.updateOne({ $pull: { likesList: req.body.userId } }); // pull the user id from the likes array
-      return res.status(200).send("The bookmark has been disliked");
+      await bookmark
+        .updateOne({ $pull: { likesList: req.body.userId } })
+        .lean(); // pull the user id from the likes array
+
+      // return the number of likes
+      const likeCount = await Bookmark.findById(req.params.id)
+        .lean()
+        .select("likesList")
+        .then((data) => data.likesList.length);
+
+      return res
+        .status(200)
+        .send({ likeCount, message: "The bookmark has been disliked" });
     } else {
       await bookmark.updateOne({ $push: { likesList: req.body.userId } }); // push the user id to the likes array
-      return res.status(200).send("The bookmark has been liked");
+      const likeCount = await Bookmark.findById(req.params.id)
+        .lean()
+        .select("likesList")
+        .then((data) => data.likesList.length);
+
+      return res
+        .status(200)
+        .send({ likeCount, message: "The bookmark has been liked" });
     }
   } catch (error) {
     return res.status(500).send(error);

@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const getUserFromToken = (req, res, next) => {
-  console.log("req.headers", req.headers);
   // check if the token is in the header
   if (!req.headers.authorization)
     return res.status(401).send({ message: "Token is not supplied." });
