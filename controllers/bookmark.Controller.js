@@ -26,13 +26,51 @@ const createBookmark = async (req, res) => {
 const deleteAllBookmarks = async (req, res) => deleteAll(req, res);
 
 // get bookmark by url using query string all bookmarks
+// const getBookmarkByUrl = async (req, res) => {
+//   try {
+//     const bookmark = await Bookmark.find({ url: req.query.url }).lean();
+//     // const bookmark = await Bookmark.findOne({ url: req.query.url }).lean();
+//     res.send(bookmark);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// Add Pagination to the bookmarks set limit and skip
 const getBookmarkByUrl = async (req, res) => {
   try {
-    const bookmark = await Bookmark.find({ url: req.query.url }).lean();
+    const bookmark = await Bookmark.find({ url: req.query.url })
+      .limit(10) // limit the number of bookmarks to be returned
+      .skip(10) // skip the number of bookmarks to be returned
+      .lean();
     // const bookmark = await Bookmark.findOne({ url: req.query.url }).lean();
     res.send(bookmark);
   } catch (error) {
     console.log(error);
+  }
+};
+
+// Put request to update a bookmark like and dislike
+const updateBookmarkLike = async (req, res) => {
+  // req.body.userId = "6326f68a737c1d04a2b42389";
+  if (!req.body.userId) {
+    return res.status(400).send("No user id provided");
+  }
+  try {
+    const bookmark = await Bookmark.findById(req.params.id); // find the bookmark by id
+    // save the user id in the array of likes and dislikes
+
+    // check if the user id is already in the likes array
+
+    if (bookmark.likesList.includes(req.body.userId)) {
+      await bookmark.updateOne({ $pull: { likesList: req.body.userId } }); // pull the user id from the likes array
+      return res.status(200).send("The bookmark has been disliked");
+    } else {
+      await bookmark.updateOne({ $push: { likesList: req.body.userId } }); // push the user id to the likes array
+      return res.status(200).send("The bookmark has been liked");
+    }
+  } catch (error) {
+    return res.status(500).send(error);
   }
 };
 
@@ -66,4 +104,5 @@ module.exports = {
   getBookmarkByUrl,
   deleteAllBookmarks,
   getBookmarkByTagOrTitle,
+  updateBookmarkLike,
 };
