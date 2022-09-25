@@ -82,8 +82,8 @@ const updateBookmarkLike = async (req, res) => {
       await bookmark.updateOne({ $push: { likesList: req.body.userId } }); // push the user id to the likes array
       const likeCount = await Bookmark.findById(req.params.id)
         .lean()
-        .select("likesList")
-        .then((data) => data.likesList.length);
+        .select("likesList") // select the likes array
+        .then((data) => data.likesList.length); // return the number of likes
 
       return res.status(200).send({
         like: true,
