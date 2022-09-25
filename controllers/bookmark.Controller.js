@@ -43,12 +43,11 @@ const getBookmarkByTagOrTitle = async (req, res) => {
     const bookmark = await Bookmark.find({
       $or: [
         { title: req.query.s },
+        { title: { $regex: req.query.s, $options: "i" } }, // case insensitive search for title using regex options is used to make it case insensitive
         { tags: req.query.s },
         { url: req.query.s },
         { description: req.query.s },
-        {
-          url: { $regex: req.query.s, $options: "i" },
-        },
+        { url: { $regex: req.query.s, $options: "i" } },
       ],
     }).lean();
     res.send(bookmark);

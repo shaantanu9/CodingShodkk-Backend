@@ -30,6 +30,25 @@ const bookmarkSchema = {
         maxLength: 20,
       },
     },
+    isPublic: {
+      type: "boolean",
+    },
+    likesList: {
+      type: "array",
+      items: {
+        // type mongoose.Schema.Types.ObjectId,
+        type: "string",
+      },
+    },
+    commentsList: {
+      type: "array",
+      items: {
+        type: "string",
+      },
+    },
+    code: {
+      type: "string",
+    },
   },
   required: ["url", "title"],
 
