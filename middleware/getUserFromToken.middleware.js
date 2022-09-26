@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const getUserFromToken = (req, res, next) => {
   // check if the token is in the header
+  console.log("req.headers.authorization", req.headers.authorization);
   if (!req.headers.authorization)
     return res.status(401).send({ message: "Token is not supplied." });
 
@@ -23,6 +24,7 @@ const getUserFromToken = (req, res, next) => {
   if (token) {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     req.body.userId = decodedToken.id;
+    console.log("req.body.userId", req.body.userId);
     next();
   } else {
     res.status(401).send({ message: "Token is not supplied." });
