@@ -30,7 +30,7 @@ const bookmarkSchema = {
         maxLength: 20,
       },
     },
-    isPublic: {
+    isPrivate: {
       type: "boolean",
     },
     likesList: {

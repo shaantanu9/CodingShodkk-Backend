@@ -4,17 +4,17 @@ const Bookmark = require("../models/bookmark.Model");
 // Create and Save a new User
 const { get, getById, patch, post, deleteOne, deleteAll } = crud(Bookmark);
 
-// Get all bookmarks
-const getAllBookmarks = async (req, res) => get(req, res);
+// // Get all bookmarks
+// const getAllBookmarks = async (req, res) => get(req, res);
 
-// Get a bookmark by id
-const getBookmark = async (req, res) => getById(req, res);
+// // Get a bookmark by id
+// const getBookmark = async (req, res) => getById(req, res);
 
-// Update a bookmark by id
-const updateBookmark = async (req, res) => patch(req, res);
+// // Update a bookmark by id
+// const updateBookmark = async (req, res) => patch(req, res);
 
-// Delete a bookmark by id
-const deleteBookmark = async (req, res) => deleteOne(req, res);
+// // Delete a bookmark by id
+// const deleteBookmark = async (req, res) => deleteOne(req, res);
 
 // Create a new bookmark
 const createBookmark = async (req, res) => {
@@ -22,24 +22,13 @@ const createBookmark = async (req, res) => {
   console.log("Bookmark Created");
 };
 
-// delete all bookmarks
-const deleteAllBookmarks = async (req, res) => deleteAll(req, res);
-
-// get bookmark by url using query string all bookmarks
-// const getBookmarkByUrl = async (req, res) => {
-//   try {
-//     const bookmark = await Bookmark.find({ url: req.query.url }).lean();
-//     // const bookmark = await Bookmark.findOne({ url: req.query.url }).lean();
-//     res.send(bookmark);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 // Add Pagination to the bookmarks set limit and skip
 const getBookmarkByUrl = async (req, res) => {
   try {
-    const bookmark = await Bookmark.find({ url: req.query.url })
+    const bookmark = await Bookmark.find({
+      url: req.query.url,
+      isPrivate: false,
+    })
       .limit(10) // limit the number of bookmarks to be returned
       .skip(10) // skip the number of bookmarks to be returned
       .lean();
@@ -101,6 +90,7 @@ const getBookmarkByTagOrTitle = async (req, res) => {
   console.log(req.query.s, "req.query.s");
   try {
     const bookmark = await Bookmark.find({
+      isPrivate: false,
       $or: [
         { title: req.query.s },
         { title: { $regex: req.query.s, $options: "i" } }, // case insensitive search for title using regex options is used to make it case insensitive
@@ -116,15 +106,31 @@ const getBookmarkByTagOrTitle = async (req, res) => {
   }
 };
 
+// Create Comment on a bookmark by id
+const createComment = async (req, res) => {
+  try {
+    const bookmark = await Bookmark.findById(req.params.id);
+    const comment = {
+      userId: req.body.userId,
+      comment: req.body.comment,
+    };
+    bookmark.comments.push(comment);
+    await bookmark.save();
+    return res.status(200).send(bookmark);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Exporting the functions to be used in the main route index.js
 module.exports = {
-  getAllBookmarks,
-  getBookmark,
-  updateBookmark,
-  deleteBookmark,
+  // getAllBookmarks,
+  // getBookmark,
+  // updateBookmark,
+  // deleteBookmark,
+  createComment,
   createBookmark,
   getBookmarkByUrl,
-  deleteAllBookmarks,
   getBookmarkByTagOrTitle,
   updateBookmarkLike,
 };
