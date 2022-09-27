@@ -3,6 +3,7 @@ const router = express.Router(); // create express router
 
 // Connecting to the controller
 const {
+  getAllBookmarks,
   getBookmarkByUrl,
   getBookmarkByTagOrTitle,
   createBookmark,
@@ -22,6 +23,7 @@ const { validateBookmarkBody } = require("../middleware/Validators");
 const getUserFromToken = require("../middleware/getUserFromToken.middleware");
 
 // Routes for the bookmarks
+router.get("/", getAllBookmarks); // get all bookmarks
 router.get("/url", getBookmarkByUrl); // get bookmark by url using query string
 router.get("/search", getBookmarkByTagOrTitle); // get bookmark by tag or title using query string all bookmarks
 //example: http://localhost:3000/bookmarks/url?url=https://www.google.com

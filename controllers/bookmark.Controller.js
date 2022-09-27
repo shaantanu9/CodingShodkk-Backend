@@ -5,7 +5,10 @@ const Bookmark = require("../models/bookmark.Model");
 const { get, getById, patch, post, deleteOne, deleteAll } = crud(Bookmark);
 
 // // Get all bookmarks
-// const getAllBookmarks = async (req, res) => get(req, res);
+const getAllBookmarks = async (req, res) => {
+  const bookmarks = await Bookmark.find({ isPrivate: false }).lean();
+  res.send(bookmarks);
+};
 
 // // Get a bookmark by id
 // const getBookmark = async (req, res) => getById(req, res);
@@ -124,7 +127,7 @@ const createComment = async (req, res) => {
 
 // Exporting the functions to be used in the main route index.js
 module.exports = {
-  // getAllBookmarks,
+  getAllBookmarks,
   // getBookmark,
   // updateBookmark,
   // deleteBookmark,
