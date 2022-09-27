@@ -117,9 +117,22 @@ const createComment = async (req, res) => {
       userId: req.body.userId,
       comment: req.body.comment,
     };
-    bookmark.comments.push(comment);
+    bookmark.commentsList.push(comment);
     await bookmark.save();
-    return res.status(200).send(bookmark);
+
+    return res.status(200).send(bookmark.commentsList);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get comments on a bookmark by id
+const getComments = async (req, res) => {
+  console.log("inside get comments");
+  try {
+    const bookmark = await Bookmark.findById(req.params.id);
+    console.log(bookmark.commentsList, "bookmark.comments", bookmark);
+    return res.status(200).send(bookmark.commentsList);
   } catch (error) {
     console.log(error);
   }
@@ -132,6 +145,7 @@ module.exports = {
   // updateBookmark,
   // deleteBookmark,
   createComment,
+  getComments,
   createBookmark,
   getBookmarkByUrl,
   getBookmarkByTagOrTitle,
