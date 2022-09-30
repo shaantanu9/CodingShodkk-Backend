@@ -8,9 +8,27 @@ const bookmarkSchema = new mongoose.Schema(
     description: { type: String, default: "" },
     tags: { type: Array, default: [] },
     isPrivate: { type: Boolean, default: false },
-    likesList: { type: Array, default: [] },
-    commentsList: { type: Array, default: [] },
+    likesList: {
+      type: Array,
+      default: [
+        {
+          userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        },
+      ],
+    },
+    commentsList: {
+      type: Array,
+      default: [
+        {
+          userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+          comment: { type: String, default: "" },
+          replies: { type: Array, default: [] },
+        },
+      ],
+    },
     code: { type: String, default: "" },
+    language: { type: String, default: "" },
+    isError: { type: Boolean, default: false },
   },
   {
     versionKey: false,
