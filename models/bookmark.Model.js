@@ -27,7 +27,7 @@ const bookmarkSchema = new mongoose.Schema(
       ],
     },
     code: { type: String, default: "" },
-    language: { type: String, default: "" },
+    language: { type: String, default: "javascript" },
     isError: { type: Boolean, default: false },
   },
   {

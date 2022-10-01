@@ -6,8 +6,27 @@ const { get, getById, patch, post, deleteOne, deleteAll } = crud(Bookmark);
 
 // // Get all bookmarks
 const getAllBookmarks = async (req, res) => {
-  const bookmarks = await Bookmark.find({ isPrivate: false }).lean();
-  res.send(bookmarks);
+  console.log(req.query, "req.query");
+  const limit = req.query.limit || 10;
+  const skip = req.query.skip || 0;
+  const page = req.query.page || 1;
+  // get total number of bookmarks length
+  const totalBookmarks = await Bookmark.find({
+    isPrivate: false,
+  }).countDocuments();
+  // total page remaining
+  const totalPages = Math.ceil(totalBookmarks / limit);
+  // get all bookmarks
+  const bookmarks = await Bookmark.find({ isPrivate: false })
+    .lean()
+    .limit(limit) // limit the number of bookmarks to be returned
+    .skip((page - 1) * limit) // skip the number of bookmarks to be returned
+    .sort({ createdAt: -1 }) // sort the bookmarks by date created
+    // .select("-commentsList, -likesList"); // select all the fields except the commentsList
+    .select("-commentsList") // select all the fields except the commentsList
+    .select("-likesList"); // select all the fields except the likesList
+  console.log(bookmarks.length, "bookmarks.length", totalBookmarks);
+  res.send({ totalPages, bookmarks });
 };
 
 // // Get a bookmark by id
@@ -36,6 +55,7 @@ const getBookmarkByUrl = async (req, res) => {
       .skip(10) // skip the number of bookmarks to be returned
       .lean();
     // const bookmark = await Bookmark.findOne({ url: req.query.url }).lean();
+    console.log(bookmark, "bookmark", bookmark.length);
     res.send(bookmark);
   } catch (error) {
     console.log(error);
