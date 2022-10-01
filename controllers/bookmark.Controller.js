@@ -1,6 +1,6 @@
 const crud = require("./crud.Controller");
 const Bookmark = require("../models/bookmark.Model");
-
+const User = require("../models/user.Model");
 // Create and Save a new User
 const { get, getById, patch, post, deleteOne, deleteAll } = crud(Bookmark);
 
@@ -23,14 +23,48 @@ const getAllBookmarks = async (req, res) => {
     .skip((page - 1) * limit) // skip the number of bookmarks to be returned
     .sort({ createdAt: -1 }) // sort the bookmarks by date created
     // .select("-commentsList, -likesList"); // select all the fields except the commentsList
-    .select("-commentsList") // select all the fields except the commentsList
-    .select("-likesList"); // select all the fields except the likesList
+    .select("-commentsList"); // select all the fields except the commentsList
+  // .select("-likesList"); // select all the fields except the likesList
   console.log(bookmarks.length, "bookmarks.length", totalBookmarks);
   res.send({ totalPages, bookmarks });
 };
 
-// // Get a bookmark by id
-// const getBookmark = async (req, res) => getById(req, res);
+// Get the name of users who liked a bookmark from the likesList
+const getBookmarkLikesUsers = async (req, res) => {
+  try {
+    const bookmark = await Bookmark.findById(req.params.id).lean();
+    const users = await User.find({
+      _id: { $in: bookmark.likesList },
+    }).select("name");
+    res.send(users);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Get the name of users who commented on a bookmark from the commentsList
+const getBookmarkCommentsUsers = async (req, res) => {
+  try {
+    const bookmark = await Bookmark.findById(req.params.id).lean();
+    const users = await User.find({
+      _id: { $in: bookmark.commentsList },
+    }).select("name");
+    res.send(users);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get bookmark by id
+const getBookmarkById = async (req, res) => {
+  try {
+    const bookmark = await Bookmark.findById(req.params.id).lean();
+    console.log(bookmark, "bookmark");
+    res.send(bookmark);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // // Update a bookmark by id
 // const updateBookmark = async (req, res) => patch(req, res);
@@ -170,4 +204,6 @@ module.exports = {
   getBookmarkByUrl,
   getBookmarkByTagOrTitle,
   updateBookmarkLike,
+  getBookmarkLikesUsers,
+  getBookmarkById,
 };

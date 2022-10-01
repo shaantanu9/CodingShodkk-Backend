@@ -9,12 +9,9 @@ const bookmarkSchema = new mongoose.Schema(
     tags: { type: Array, default: [] },
     isPrivate: { type: Boolean, default: false },
     likesList: {
+      default: [],
       type: Array,
-      default: [
-        {
-          userId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-        },
-      ],
+      [mongoose.Schema.Types.ObjectId]: { ref: "user" },
     },
     commentsList: {
       type: Array,
