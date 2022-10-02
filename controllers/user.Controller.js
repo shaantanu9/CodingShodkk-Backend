@@ -23,16 +23,24 @@ const createUser = async (req, res) => post(req, res);
 // Login user and return token using JWT
 const loginUser = async (req, res) => {
   console.log("loginUser", req.body);
-  const { email, password } = req.body;
+  const { email, password, keepMeLogin } = req.body;
   try {
     const user = await Users.findOne({ email });
     if (!user) return res.status(400).send({ message: "User not found" });
     const isMatch = await user.checkPassword(password);
     if (!isMatch)
       return res.status(400).send({ message: "Invalid credentials" });
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    if (keepMeLogin) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        // expire none means the token will never expire
+        expiresIn: "1M", // 1 month
+      });
+    } else {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+    }
+
     res.status(200).send({ token });
   } catch (error) {
     res.status(400).send({ error: error.message });
