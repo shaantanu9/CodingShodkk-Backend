@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "kill -9 $(lsof -ti:8080) && nodemon index.js",
     "test": "node test.js"
   },
   "keywords": [],
