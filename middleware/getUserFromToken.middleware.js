@@ -5,6 +5,7 @@ require("dotenv").config();
 const getUserFromToken = (req, res, next) => {
   // check if the token is in the header
   console.log("req.headers.authorization", req.headers.authorization);
+  console.log("req.headers", req.headers);
   if (!req.headers.authorization)
     return res.status(401).send({ message: "Token is not supplied." });
 

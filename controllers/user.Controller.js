@@ -34,13 +34,16 @@ const loginUser = async (req, res) => {
       return res.status(400).send({ message: "Invalid credentials" });
     if (keepMeLogin) {
       console.log("1Months token");
-      token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "30d",
+      });
     } else {
       console.log("1day token");
       token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "1d",
       });
     }
+    console.log(token, "token");
 
     res.status(200).send({ token });
   } catch (error) {
