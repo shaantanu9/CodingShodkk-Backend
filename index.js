@@ -6,7 +6,7 @@ require("dotenv").config(); // require dotenv to use environment variables
 
 // using morgan to log the requests
 const morgan = require("morgan");
-app.use(morgan("dev")); // dev is a format for morgan
+// app.use(morgan("dev")); // dev is a format for morgan
 
 
 // connect to the main route

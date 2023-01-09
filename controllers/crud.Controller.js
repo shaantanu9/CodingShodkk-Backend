@@ -55,4 +55,5 @@ module.exports = (model) => ({
   post: post(model),
   deleteOne: deleteOne(model),
   deleteAll: deleteAll(model),
+
 });

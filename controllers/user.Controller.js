@@ -27,7 +27,9 @@ const loginUser = async (req, res) => {
   const { email, password, keepMeLogin } = req.body;
   console.log(keepMeLogin, "keepMeLogin");
   try {
-    const user = await Users.findOne({ email });
+    // dont use findOne because it will return null if not found and we want to return error message instead of findone and check if it is null
+    const user = await Users.findOne({ email }).select("-createdAt -updatedAt -__v -phone")
+
     if (!user) return res.status(400).send({ message: "User not found" });
     const isMatch = await user.checkPassword(password);
     if (!isMatch)
@@ -43,9 +45,13 @@ const loginUser = async (req, res) => {
         expiresIn: "1d",
       });
     }
-    console.log(token, "token");
 
-    res.status(200).send({ token });
+    userData = {
+      name: user.name,
+      email: user.email
+    }
+
+    res.status(200).send({ token, user:userData });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
